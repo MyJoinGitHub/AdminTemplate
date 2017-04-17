@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- status="debug" 可以查看log4j的装配过程-->
+<!-- status="OFF"，可以去掉，它的含义为是否记录log4j2本身的event信息，默认是OFF -->
+<Configuration>
+
+    <Properties>
+        <Property name="LOG_ROOT">E:\Github\logs\admin</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <!--只打印debug级别的日志-->
+        <RollingFile name="DEBUG_LEVEL" fileName="${LOG_ROOT}/admin_debug.log" filePattern="${LOG_ROOT}/admin_debug_%d{yyyy_MM_dd}.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+            </Policies>
+            <Filters>
+                <ThresholdFilter level="INFO" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <DefaultRolloverStrategy max="8"/>
+        </RollingFile>
+        <!--只打印Info级别的日志-->
+        <RollingFile name="INFO_LEVEL" fileName="${LOG_ROOT}/admin_info.log" filePattern="${LOG_ROOT}/admin_info_%d{yyyy_MM_dd}.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <!-- 每天一个文件 -->
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+            </Policies>
+            <Filters>
+                <!--禁止warn级别以上的日志写入-->
+                <ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <DefaultRolloverStrategy max="8"/>
+        </RollingFile>
+        <!--只打印Warn级别的日志-->
+        <RollingFile name="WARN_LEVEL" fileName="${LOG_ROOT}/admin_warn.log" filePattern="${LOG_ROOT}/admin_warn_%d{yyyy_MM_dd}.log">
+            <PatternLayout>
+                <pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+            </Policies>
+            <Filters>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <DefaultRolloverStrategy max="8"/>
+        </RollingFile>
+        <!--只打印Error级别的日志-->
+        <RollingFile name="ERROR_LEVEL" fileName="${LOG_ROOT}/admin_error.log" filePattern="${LOG_ROOT}/admin_error_%d{yyyy_MM_dd}.log">
+            <PatternLayout>
+                <pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+            </Policies>
+            <Filters>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <DefaultRolloverStrategy max="8"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!--建立一个默认的root的logger-->
+        <root level="debug">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="DEBUG_LEVEL"/>
+            <AppenderRef ref="INFO_LEVEL"/>
+            <AppenderRef ref="WARN_LEVEL"/>
+            <AppenderRef ref="ERROR_LEVEL"/>
+        </root>
+    </Loggers>
+</Configuration>
