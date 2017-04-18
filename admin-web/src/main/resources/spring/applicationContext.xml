@@ -6,11 +6,17 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <!-- Root Context: defines shared resources visible to all other web components -->
-
     <context:component-scan base-package="com.imemyself">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
         <context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
     </context:component-scan>
 
+    <import resource="classpath:db/spring-datasource.xml"/>
+    <import resource="classpath:db/spring-mybatis.xml"/>
+    <import resource="classpath:db/spring-tx.xml"/>
+
+    <beans profile="development">
+        <context:property-placeholder ignore-resource-not-found="false" location="classpath*:env/dev/profile-db.properties"/>
+    </beans>
 
 </beans>

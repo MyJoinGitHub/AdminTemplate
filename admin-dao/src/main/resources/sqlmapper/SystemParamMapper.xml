@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.imemyself.dao.system.SystemParamMapper">
+    <resultMap id="BaseResultMap" type="com.imemyself.domain.system.SystemParam">
+        <result property="id" column="id"></result>
+        <result property="sysParamCode" column="sys_param_code"></result>
+        <result property="sysParamValue" column="sys_param_value"></result>
+        <result property="isDelete" column="is_delete"></result>
+        <result property="creator" column="creator"></result>
+        <result property="modifier" column="modifier"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="updateTime" column="update_time"></result>
+        <result property="sysVersion" column="sys_version"></result>
+        <result property="remark" column="remark"></result>
+    </resultMap>
+    <!-- 用于select查询公用抽取的列 -->
+    <sql id="TsystemParam_columns">
+        id,sys_param_code,sys_param_value,is_delete,creator,modifier,create_time,update_time,sys_version,remark
+    </sql>
+    <select id="findOne" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT
+        <include refid="TsystemParam_columns"></include>
+        FROM t_system_param
+        WHERE
+        id = #{id}
+    </select>
+
+    <delete id="delete">
+    UPDATE t_system_param
+    SET is_delete = 1,
+     modifier = #{modifier,jdbcType=VARCHAR},
+     update_time = NOW()
+    WHERE
+               id = #{id}            AND sys_version = #{sysVersion,jdbcType=INTEGER}
+  </delete>
+    <!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_system_param (
+        <if test="@Ognl@isNotEmpty(sysParamCode)">
+            sys_param_code,
+        </if>
+        <if test="@Ognl@isNotEmpty(sysParamValue)">
+            sys_param_value,
+        </if>
+        <if test="@Ognl@isNotEmpty(isDelete)">
+            is_delete,
+        </if>
+        <if test="@Ognl@isNotEmpty(creator)">
+            creator,
+        </if>
+        <if test="@Ognl@isNotEmpty(modifier)">
+            modifier,
+        </if>
+        <if test="@Ognl@isNotEmpty(createTime)">
+            create_time,
+        </if>
+        <if test="@Ognl@isNotEmpty(updateTime)">
+            update_time,
+        </if>
+        <if test="@Ognl@isNotEmpty(sysVersion)">
+            sys_version,
+        </if>
+        <if test="@Ognl@isNotEmpty(remark)">
+            remark
+        </if>
+        ) VALUES (
+        <if test="@Ognl@isNotEmpty(sysParamCode)">
+            #{sysParamCode},
+        </if>
+        <if test="@Ognl@isNotEmpty(sysParamValue)">
+            #{sysParamValue},
+        </if>
+        <if test="@Ognl@isNotEmpty(isDelete)">
+            #{isDelete},
+        </if>
+        <if test="@Ognl@isNotEmpty(creator)">
+            #{creator},
+        </if>
+        <if test="@Ognl@isNotEmpty(modifier)">
+            #{modifier},
+        </if>
+        <if test="@Ognl@isNotEmpty(createTime)">
+            #{createTime},
+        </if>
+        <if test="@Ognl@isNotEmpty(updateTime)">
+            #{updateTime},
+        </if>
+        1,
+        <if test="@Ognl@isNotEmpty(remark)">
+            #{remark}
+        </if>
+        )
+    </insert>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="TsystemParam_columns"></include>
+        FROM t_system_param
+        WHERE is_delete=0
+    </select>
+
+    <select id="findAll_Count" resultType="long">
+    SELECT count(1)
+    FROM t_system_param
+    WHERE is_delete=0 
+  </select>
+
+    <select id="findByPage" resultMap="BaseResultMap">
+        SELECT
+        <include refid="TsystemParam_columns"></include>
+        FROM t_system_param
+        <include refid="TsystemParam_findPage_where"></include>
+    </select>
+
+    <select id="findByPage_Count" resultType="java.lang.Long">
+        SELECT count(1)
+        FROM t_system_param
+        <include refid="TsystemParam_findPage_where"></include>
+    </select>
+
+    <sql id="TsystemParam_findPage_where">
+        <where>
+            is_delete=0
+            <if test="@Ognl@isNotEmpty(id)">
+                <![CDATA[ AND id = #{id}]]>
+            </if>
+            <if test="@Ognl@isNotEmpty(sysParamCode)">
+                <![CDATA[ AND sys_param_code = #{sysParamCode}]]>
+            </if>
+            <if test="@Ognl@isNotEmpty(sysParamValue)">
+                <![CDATA[ AND sys_param_value = #{sysParamValue}]]>
+            </if>
+            <if test="@Ognl@isNotEmpty(isDelete)">
+                <![CDATA[ AND is_delete = #{isDelete}]]>
+            </if>
+            <if test="@Ognl@isNotEmpty(creator)">
+                <![CDATA[ AND creator = #{creator}]]>
+            </if>
+            <if test="@Ognl@isNotEmpty(modifier)">
+                <![CDATA[ AND modifier = #{modifier}]]>
+            </if>
+            <if test="@Ognl@isNotEmpty(createTimeBegin)">
+                <![CDATA[ AND create_time >= #{createTimeBegin}]]>
+            </if>
+            <if test="@Ognl@isNotEmpty(createTimeEnd)">
+                <![CDATA[ AND create_time <= #{createTimeEnd}]]>
+            </if>
+            <if test="@Ognl@isNotEmpty(updateTimeBegin)">
+                <![CDATA[ AND update_time >= #{updateTimeBegin}]]>
+            </if>
+            <if test="@Ognl@isNotEmpty(updateTimeEnd)">
+                <![CDATA[ AND update_time <= #{updateTimeEnd}]]>
+            </if>
+            <if test="@Ognl@isNotEmpty(sysVersion)">
+                <![CDATA[ AND sys_version = #{sysVersion}]]>
+            </if>
+            <if test="@Ognl@isNotEmpty(remark)">
+                <![CDATA[ AND remark = #{remark}]]>
+            </if>
+        </where>
+    </sql>
+    <!--update-begin-->
+    <sql id="TsystemParam_baseUpdateSql">
+        UPDATE t_system_param SET
+        <if test="@Ognl@isNotEmpty(sysParamCode)">
+            <![CDATA[sys_param_code = #{sysParamCode},]]>
+        </if>
+        <if test="@Ognl@isNotEmpty(sysParamValue)">
+            <![CDATA[sys_param_value = #{sysParamValue},]]>
+        </if>
+        <if test="@Ognl@isNotEmpty(isDelete)">
+            <![CDATA[is_delete = #{isDelete},]]>
+        </if>
+        <if test="@Ognl@isNotEmpty(creator)">
+            <![CDATA[creator = #{creator},]]>
+        </if>
+        <if test="@Ognl@isNotEmpty(modifier)">
+            <![CDATA[modifier = #{modifier},]]>
+        </if>
+        <if test="@Ognl@isNotEmpty(createTime)">
+            <![CDATA[create_time = #{createTime},]]>
+        </if>
+        <if test="@Ognl@isNotEmpty(updateTime)">
+            <![CDATA[update_time = #{updateTime},]]>
+        </if>
+        <if test="@Ognl@isNotEmpty(sysVersion)">
+            <![CDATA[sys_version = #{sysVersion},]]>
+        </if>
+        <if test="@Ognl@isNotEmpty(remark)">
+            <![CDATA[remark = #{remark},]]>
+        </if>
+        update_time = now(),
+        sys_version = sys_version + 1
+    </sql>
+    <update id="updateByPrimaryKey">
+        <include refid="TsystemParam_baseUpdateSql"></include>
+        WHERE
+        id = #{id}
+    </update>
+    <update id="updateByOptimisticLock">
+        <include refid="TsystemParam_baseUpdateSql"></include>
+        WHERE
+        id = #{id} AND sys_version = #{sysVersion, jdbcType=INTEGER}
+    </update>
+    <!--update-end-->
+</mapper>
