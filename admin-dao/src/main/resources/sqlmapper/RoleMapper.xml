@@ -42,9 +42,6 @@
         <if test="@Ognl@isNotEmpty(roleName)">
             role_name,
         </if>
-        <if test="@Ognl@isNotEmpty(isDelete)">
-            is_delete,
-        </if>
         <if test="@Ognl@isNotEmpty(creator)">
             creator,
         </if>
@@ -57,12 +54,11 @@
         <if test="@Ognl@isNotEmpty(updateTime)">
             update_time,
         </if>
-        <if test="@Ognl@isNotEmpty(sysVersion)">
-            sys_version,
-        </if>
+          sys_version,
         <if test="@Ognl@isNotEmpty(remark)">
-            remark
+            remark,
         </if>
+        is_delete
         ) VALUES (
         <if test="@Ognl@isNotEmpty(roleCode)">
             #{roleCode},
@@ -87,8 +83,9 @@
         </if>
         1,
         <if test="@Ognl@isNotEmpty(remark)">
-            #{remark}
+            #{remark},
         </if>
+        0
         )
     </insert>
 

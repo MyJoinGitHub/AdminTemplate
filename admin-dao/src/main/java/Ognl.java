@@ -1,5 +1,3 @@
-package com.imemyself.dao;
-
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Map;

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import com.imemyself.dao.system.UserMapper;
+import com.imemyself.service.system.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -23,7 +24,7 @@ public class HomeController {
     private static final Logger logger = LogManager.getLogger(HomeController.class);
 
     @Resource
-    private UserMapper userMapper;
+    private UserService userService;
 
     /**
      * Simply selects the home view to render by returning its name.
@@ -38,8 +39,8 @@ public class HomeController {
         String formattedDate = dateFormat.format(date);
 
         model.addAttribute("serverTime", formattedDate);
-        userMapper.findAll();
-        return "home";
+//        userService.test();
+        return "index";
     }
 
 }
